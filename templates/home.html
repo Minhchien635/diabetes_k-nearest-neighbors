@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Flask Tutorial</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+      integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="../static/home.css" />
+  </head>
+  <body>
+    <form method="get" class="container d-flex" action="/knn">
+      <div class="mb-3">
+        <label for="Pregnancies" class="form-label">Pregnancies</label>
+        <input
+          type="text"
+          name="Pregnancies"
+          class="form-control"
+          id="Pregnancies"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="Glucose" class="form-label">Glucose</label>
+        <input type="text" name="Glucose" class="form-control" id="Glucose" />
+      </div>
+      <div class="mb-3">
+        <label for="BloodPressure" class="form-label">BloodPressure</label>
+        <input
+          type="text"
+          name="BloodPressure"
+          class="form-control"
+          id="BloodPressure"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="SkinThickness" class="form-label">SkinThickness</label>
+        <input
+          type="text"
+          name="SkinThickness"
+          class="form-control"
+          id="SkinThickness"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="Insulin" class="form-label">Insulin</label>
+        <input type="text" name="Insulin" class="form-control" id="Insulin" />
+      </div>
+      <div class="mb-3">
+        <label for="BMI" class="form-label">BMI</label>
+        <input type="text" name="BMI" class="form-control" id="BMI" />
+      </div>
+      <div class="mb-3">
+        <label for="DiabetesPedigreeFunction" class="form-label"
+          >DiabetesPedigreeFunction</label
+        >
+        <input
+          type="text"
+          name="DiabetesPedigreeFunction"
+          class="form-control"
+          id="DiabetesPedigreeFunction"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="Age" class="form-label">Age</label>
+        <input type="text"" name = "Age" class="form-control" id="Age" />
+      </div>
+      <div class="mt-5">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </body>
+  <script>
+    function handleSubmit(event) {
+      event.preventDefault();
+
+      let pregnancies,
+        glucose,
+        bloodPressure,
+        skinThickness,
+        insulin,
+        bmi,
+        diabetesPedigreeFunction,
+        age;
+
+      const data = new FormData(event.target);
+
+      const value = data.get("Age");
+      console.log(value);
+
+      pregnancies = data.get("Pregnancies");
+      glucose = data.get("Glucose");
+      bloodPressure = data.get("BloodPressure");
+      skinThickness = data.get("SkinThickness");
+      insulin = data.get("Insulin");
+      bmi = data.get("BMI");
+      diabetesPedigreeFunction = data.get("DiabetesPedigreeFunction");
+      age = data.get("Age");
+
+      var xhr = new XMLHttpRequest();
+
+      xhr.onreadystatechange = function () {
+        let num = JSON.parse(xhr.responseText);
+        console.log(num["out_come"]);
+        num["out_come"] === 0 ? alert("Không mắc bệnh") : alert("Đã bị bệnh");
+      };
+
+      xhr.open("POST", "http://localhost:5000/knn", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(
+        JSON.stringify({
+          pregnancies: pregnancies,
+          glucose: glucose,
+          bloodPressure: bloodPressure,
+          skinThickness: skinThickness,
+          insulin: insulin,
+          bmi: bmi,
+          diabetesPedigreeFunction: diabetesPedigreeFunction,
+          age: age,
+        })
+      );
+    }
+
+    const form = document.querySelector("form");
+    form.addEventListener("submit", handleSubmit);
+  </script>
+</html>
