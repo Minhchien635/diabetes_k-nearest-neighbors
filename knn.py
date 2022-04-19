@@ -103,7 +103,7 @@ class Knn:
 
         for i in range(1, 15):
 
-            knn = KNeighborsClassifier(i, metric='euclidean')
+            knn = KNeighborsClassifier(n_neighbors=i, metric='euclidean')
             knn.fit(X_train, y_train)
 
             train_scores.append(knn.score(X_train, y_train))
@@ -124,13 +124,15 @@ class Knn:
         print('Max test score {} % and k = {}'.format(
             max_test_score * 100, list(map(lambda x: x + 1, test_scores_ind))))
 
-        knn = KNeighborsClassifier(11, metric='euclidean')
+        knn = KNeighborsClassifier(n_neighbors=11, metric='euclidean')
 
         knn.fit(X_train, y_train)
         knn.score(X_test, y_test)
         #print(X.iloc[-1])
 
         out_come = int(knn.predict(C))
+
+        # Lấy dòng cuối của file dữ liệu gán vào new_row (do dòng cuối cột Outcome chưa có giá trị)
         with open('diabetes.csv', 'r+') as f_object:
             last_row = f_object.readlines()[-1]
 
@@ -144,6 +146,7 @@ class Knn:
 
             f_object.close()
 
+        # Xóa dòng cuối file dữ liệu và ghi vào lại new_row (đã có giá trị cột Outcome)
         with open('diabetes.csv', 'r+') as f:
             writer_object = writer(f)
 
