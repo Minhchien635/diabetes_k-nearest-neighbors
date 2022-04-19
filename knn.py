@@ -1,15 +1,13 @@
-from flask import jsonify
-from mlxtend.plotting import plot_decision_regions
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import json
 
 sns.set()
 import warnings
 
 warnings.filterwarnings('ignore')
-
 from csv import writer, reader
 
 
@@ -19,7 +17,6 @@ class Knn:
         self.input = pd.DataFrame(data)
 
     def knn(self):
-        #self.input = pd.read_csv('diabete.csv')
         print(self.input)
 
         diabetes_data = pd.read_csv('diabetes.csv')
@@ -41,14 +38,16 @@ class Knn:
                                 self.input.loc[0]['DiabetesPedigreeFunction']
                             ) and diabetes_data.loc[i]['Age'] == float(
                                 self.input.loc[0]['Age']):
-                print(diabetes_data.loc[i]['Outcome'])
-                return {"out_come": int(diabetes_data.loc[i]['Outcome'])}
+                out_come = diabetes_data.loc[i]['Outcome']
+                print(out_come)
+                return json.dumps(
+                    {"out_come": diabetes_data.loc[i]['Outcome']}, indent=4)
 
         with open('diabetes.csv', 'a') as f_object:
 
             writer_object = writer(f_object)
 
-            writer_object.writerow(self.input.loc[0])
+            writer_object.writerow(list(map(float, self.input.loc[0])))
 
             f_object.close()
 
@@ -137,9 +136,12 @@ class Knn:
         out_come = int(knn.predict(C))
         with open('diabetes.csv', 'r+') as f_object:
             last_row = f_object.readlines()[-1]
-            new_row = last_row.replace('\n', '').split(',')
 
-            new_row.append(out_come)
+            list_string_row = last_row.replace('\n', '').split(',')
+
+            new_row = list(map(float, list_string_row))
+
+            new_row.append(float(out_come))
 
             writer_object = writer(f_object)
 
@@ -161,4 +163,4 @@ class Knn:
             writer_object.writerow(new_row)
             print(new_row)
             f.close()
-            return {"out_come": out_come}
+            return json.dumps({"out_come": out_come}, indent=4)

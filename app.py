@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, request
 from knn import Knn
 import pandas as pd
 import json
@@ -15,14 +15,17 @@ def home():
 def knn():
     data = json.loads(request.data)
 
-    p = data.get("pregnancies")
-    g = data.get("glucose")
-    b = data.get("bloodPressure")
-    s = data.get("skinThickness")
-    i = data.get("insulin")
-    bmi = data.get("bmi")
-    d = data.get("diabetesPedigreeFunction")
-    a = data.get("age")
+    try:
+        p = float(data.get("pregnancies"))
+        g = float(data.get("glucose"))
+        b = float(data.get("bloodPressure"))
+        s = float(data.get("skinThickness"))
+        i = float(data.get("insulin"))
+        bmi = float(data.get("bmi"))
+        d = float(data.get("diabetesPedigreeFunction"))
+        a = float(data.get("age"))
+    except Exception as e:
+        return json.dumps({"error": str(e)}, indent=4)
 
     # lst = [['2', '122', '70', '27', '0', '36.8', '0.34', '27']]
     df = pd.DataFrame([[p, g, b, s, i, bmi, d, a]],
@@ -32,7 +35,7 @@ def knn():
                           'DiabetesPedigreeFunction', 'Age'
                       ])
 
-    return jsonify(Knn(df).knn())
+    return Knn(df).knn()
 
 
 if __name__ == "__main__":
