@@ -26,9 +26,10 @@
     ></script>
     <link rel="stylesheet" href="../static/home.css" />
   </head>
-  <body>
-    <form method="get" class="container mt-5" action="/knn">
-      <h1>Dự đoán bệnh tiểu đường</h1>
+  <body class="container mt-2">
+    <h1>Dự đoán bệnh tiểu đường</h1>
+    <form method="get" class="mt-5" action="/knn">
+      <h5>Các chỉ số liên quan cần cung cấp:</h5>
       <div class="d-flex">
         <div class="mb-3">
           <label for="Pregnancies" class="form-label">Pregnancies</label>
@@ -88,7 +89,7 @@
       <div class="mt-1">
         <button type="submit" class="btn btn-primary mr-5">Xem kết quả</button>
       </div>
-      <div class="mt-3"><h3 id="outcome"></h3></div>
+      <div class="mt-3 text-danger"><h3 id="outcome"></h3></div>
     </form>
   </body>
   <script>
@@ -104,10 +105,7 @@
         diabetesPedigreeFunction,
         age;
 
-      const data = new FormData(event.target);
-
-      const value = data.get("Age");
-      console.log(value);
+      let data = new FormData(event.target);
 
       pregnancies = data.get("Pregnancies");
       glucose = data.get("Glucose");
@@ -118,7 +116,7 @@
       diabetesPedigreeFunction = data.get("DiabetesPedigreeFunction");
       age = data.get("Age");
 
-      var xhr = new XMLHttpRequest();
+      let xhr = new XMLHttpRequest();
 
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
@@ -129,9 +127,9 @@
               "Các trường nhập vào không được để trống và phải là số"
             );
           if (num["out_come"] === 0) {
-            document.getElementById("outcome").innerHTML = "Không bị bệnh";
+            document.getElementById("outcome").innerHTML = "KHÔNG bị bệnh";
           } else {
-            document.getElementById("outcome").innerHTML = "Đã bị bệnh";
+            document.getElementById("outcome").innerHTML = "ĐÃ bị bệnh";
           }
         }
       };
@@ -140,14 +138,14 @@
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.send(
         JSON.stringify({
-          pregnancies: pregnancies,
-          glucose: glucose,
-          bloodPressure: bloodPressure,
-          skinThickness: skinThickness,
-          insulin: insulin,
-          bmi: bmi,
-          diabetesPedigreeFunction: diabetesPedigreeFunction,
-          age: age,
+          pregnancies,
+          glucose,
+          bloodPressure,
+          skinThickness,
+          insulin,
+          bmi,
+          diabetesPedigreeFunction,
+          age,
         })
       );
     }

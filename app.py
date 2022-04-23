@@ -27,13 +27,19 @@ def knn():
     except Exception as e:
         return json.dumps({"error": str(e)}, indent=4)
 
-    # lst = [['2', '122', '70', '27', '0', '36.8', '0.34', '27']]
-    df = pd.DataFrame([[p, g, b, s, i, bmi, d, a]],
-                      columns=[
-                          'Pregnancies', 'Glucose', 'BloodPressure',
-                          'SkinThickness', 'Insulin', 'BMI',
-                          'DiabetesPedigreeFunction', 'Age'
-                      ])
+    df = pd.DataFrame(
+        [[p, g, b, s, i, bmi, d, a]],
+        columns=[
+            "Pregnancies",
+            "Glucose",
+            "BloodPressure",
+            "SkinThickness",
+            "Insulin",
+            "BMI",
+            "DiabetesPedigreeFunction",
+            "Age",
+        ],
+    )
 
     return Knn(df).knn()
 
